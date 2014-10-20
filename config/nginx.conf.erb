@@ -54,7 +54,19 @@ http {
         proxy_set_header X-NginX-Proxy true;
         proxy_ssl_session_reuse off;
         proxy_redirect off;
-        <% if ENV["NGINX_DEBUG"] %>add_header X-SPA-Proxy on;<% end %>
+        <% if ENV["NGINX_DEBUG"] %>add_header X-SPA-API-Proxy on;<% end %>
+      }
+    <% end %>
+
+    <% if ENV["TOKEN_URL"] %>
+      location <%= ENV["TOKEN_PATH"] || "/token" %> {
+        proxy_pass <%= ENV["TOKEN_URL"] %>;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_ssl_session_reuse off;
+        proxy_redirect off;
+        <% if ENV["NGINX_DEBUG"] %>add_header X-SPA-Token-Proxy on;<% end %>
       }
     <% end %>
 
