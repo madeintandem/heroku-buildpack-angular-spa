@@ -58,12 +58,6 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$build_dir/vendor/node/bin:$PATH
 
-
-status "Downloading and installing nginx"
-nginx_version=${NGINX_VER:-1.6.2}
-nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
-curl $nginx_url -s -o - | tar xzf - -C $build_dir/vendor
-
 status "Adding boot script"
 cp $bp_dir/bin/boot.sh $build_dir
 
@@ -77,6 +71,16 @@ else
   status "Custom nginx config found"
 fi
 
+cd $build_dir
+
+status "Downloading and installing nginx"
+nginx_version=${NGINX_VER:-1.6.2}
+nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
+curl $nginx_url -s -o - | tar xzf - -C $build_dir/vendor
+mkdir $build_dir/vendor/nginx
+cd $build_dir/nginx-$nginx_version
+exec configure --without-http_rewrite_module --with-http_ssl_module --prefix=$build_dir/vendor/nginx
+exec make install
 cd $build_dir
 
 # If node_modules directory is checked into source control then
