@@ -60,7 +60,7 @@ PATH=$build_dir/vendor/node/bin:$PATH
 
 
 status "Downloading and installing nginx"
-nginx_version = ${NGINX_VER:-1.6.2}
+nginx_version=${NGINX_VER:-1.6.2}
 nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
 curl $nginx_url -s -o - | tar xzf - -C $build_dir/vendor
 
