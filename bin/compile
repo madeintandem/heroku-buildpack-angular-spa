@@ -79,8 +79,8 @@ nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
 curl $nginx_url -s -o - | tar xzf - -C $build_dir/vendor
 mkdir $build_dir/vendor/nginx
 cd $build_dir/vendor/nginx-$nginx_version
-exec configure --without-http_rewrite_module --with-http_ssl_module --prefix=$build_dir/vendor/nginx
-exec make install
+./configure --without-http_rewrite_module --with-http_ssl_module --prefix=$build_dir/vendor/nginx 2>&1 | indent
+make install  2>&1 | indent
 cd $build_dir
 
 # If node_modules directory is checked into source control then
