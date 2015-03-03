@@ -76,9 +76,7 @@ cd $build_dir
 status "Downloading and installing pcre"
 pcre_version=${PCRE_VER:-8.36}
 curl ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-$pcre_version.tar.gz | tar xzf - -C $build_dir/vendor
-cd $build_dir/pcre-${pcre_version}
 mkdir $build_dir/vendor/pcre
-./configure --prefix=$build_dir/vendor/pcre 2&>1 | indent
 
 status "Downloading and installing nginx"
 nginx_version=${NGINX_VER:-1.6.2}
