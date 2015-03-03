@@ -73,13 +73,20 @@ fi
 
 cd $build_dir
 
+status "Downloading and installing pcre"
+pcre_version=${PCRE_VER:-8.36}
+curl ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-$pcre_version.tar.gz | tar xzf - -C $build_dir/vendor
+cd $build_dir/pcre-${pcre_version}
+mkdir $build_dir/vendor/pcre
+./configure --prefix=$build_dir/vendor/pcre 2&>1 | indent
+
 status "Downloading and installing nginx"
 nginx_version=${NGINX_VER:-1.6.2}
 nginx_url="http://nginx.org/download/nginx-$nginx_version.tar.gz"
 curl $nginx_url -s -o - | tar xzf - -C $build_dir/vendor
 mkdir $build_dir/vendor/nginx
 cd $build_dir/vendor/nginx-$nginx_version
-./configure --without-http_rewrite_module --with-http_ssl_module --prefix=$build_dir/vendor/nginx 2>&1 | indent
+./configure --with-pcre=$build_dir/vendor/pcre-${pcre_version} --with-pcre-opt="--prefix=$build_dir/vendor/pcre" --with-http_ssl_module --prefix=$build_dir/vendor/nginx 2>&1 | indent
 make install  2>&1 | indent
 cd $build_dir
 
